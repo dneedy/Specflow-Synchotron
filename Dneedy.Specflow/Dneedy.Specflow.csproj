@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>dneedy</Authors>
+    <Company />
+    <Product>Synchotron</Product>
+    <Title>Specflow Serial Scenario Blocker</Title>
+    <Description>Within a parallel run, enable blocking behaviour so scenarios can be guaranteed to run individually, eg triggered by traits.  Prevents having to edit the assembly info and rebuild between sequential/parallel runs.</Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dneedy/Specflow-Synchotron.git</RepositoryUrl>
+    <RepositoryType />
+    <PackageReleaseNotes>Alpha Working Version</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Dneedy.Specflow.Synchotron</PackageId>
+    <ApplicationIcon>steam-machine_icon-icons.com_68346.ico</ApplicationIcon>
+    <PackageTags>specflow nunit parallel sequential block dneedy</PackageTags>
+    <Copyright>David Needham</Copyright>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
