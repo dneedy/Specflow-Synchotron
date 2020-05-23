@@ -10,13 +10,15 @@
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/dneedy/Specflow-Synchotron.git</RepositoryUrl>
     <RepositoryType />
-    <PackageReleaseNotes>Alpha Working Version</PackageReleaseNotes>
+    <PackageReleaseNotes>Alpha Working Version
+- Includes Readme</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Dneedy.Specflow.Synchotron</PackageId>
     <ApplicationIcon>steam-machine_icon-icons.com_68346.ico</ApplicationIcon>
     <PackageTags>specflow nunit parallel sequential block dneedy</PackageTags>
     <Copyright>David Needham</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
