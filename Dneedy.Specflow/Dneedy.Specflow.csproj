@@ -14,7 +14,7 @@
 - Includes Readme</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Dneedy.Specflow.Synchotron</PackageId>
-    <ApplicationIcon>steam-machine_icon-icons.com_68346.ico</ApplicationIcon>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
     <PackageTags>specflow nunit parallel sequential block dneedy</PackageTags>
     <Copyright>David Needham</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>

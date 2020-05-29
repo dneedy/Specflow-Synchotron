@@ -6,41 +6,57 @@
  
     public class Synchotron
     {
-        private static object GlobalKey = new object();
+        private static object SingletonKey = new object();
 
         /// <summary>
-        /// Must be called the first time
+        /// Optional Logging that can be set to track the synchronisation occurring
         /// </summary>
-        /// <param name="testName"></param>
+        public static ISynchotronLog GlobalLog { get;  set; }
+
+        /// <summary>
+        /// Start tracking a resource
+        /// </summary>
+        /// <param name="resourceName"></param>
         /// <param name="runOnItsOwn"></param>
-        /// <returns></returns>
-        public static bool NewTestIsBlocked(string testName, bool runOnItsOwn)
+        /// <returns>If the resource is blocked</returns>
+        public static bool ResourceIsBlocked(string resourceName, bool runOnItsOwn)
         {
-            lock (GlobalKey)
+            lock (SingletonKey)
             {
-                var test = new Synch(
-                        id: testName,
+                var resource = new Resource(
+                        id: resourceName,
                         runOnItsOwn: runOnItsOwn);
-                var blocked = Synch.Blocked(test);
-                Log("+", test);
+
+                // Index
+                Slots.Add(resource);
+
+                var blocked = Slots.Blocked(resource);
+
+                Log(">", resource);
+
                 return blocked;
             }
         }
 
         /// <summary>
-        /// When Added and could not carry on, this is subsequenly polled
+        /// Check if the resource is still blocked
         /// </summary>
-        /// <param name="testName"></param>
+        /// <param name="resourceName"></param>
         /// <returns></returns>
-        public static bool TestIsBlocked(string testName)
+        public static bool ResourceIsBlocked(string resourceName)
         {
-            lock (GlobalKey)
+            lock (SingletonKey)
             {
-                var test = Synch.GetLock(testName);
-                var blocked = Synch.Blocked(test);
+                var resource = Slots.GetResource(resourceName);
+                if(resource == null)
+                {
+                    throw new IndexOutOfRangeException($"A resource named {resourceName} has not been setup with a runOnItsOwn context");
+                }
+
+                var blocked = Slots.Blocked(resource);
                 if (!blocked)
                 {
-                    Log(" ", test);
+                    Log("*", resource);
                 }
                 else
                 {
@@ -51,130 +67,28 @@
         }
 
         /// <summary>
-        /// When test has finished
+        /// Finish tracking a resource
         /// </summary>
-        /// <param name="testName"></param>
-        public static void TestHasFinished(string testName)
+        /// <param name="resourceName"></param>
+        public static void ResourceHasFinished(string resourceName)
         {
-            lock (GlobalKey)
+            lock (SingletonKey)
             {
-                var test = Synch.GetLock(testName);
-                Log("-", test, finished: true);
-                Synch.IHaveFinished(test);
+                var resource = Slots.GetResource(resourceName);
+                Log("<", resource, finished: true);
+                Slots.IHaveFinished(resource);
             }
         }
 
-        private static void Log(string prefix, Synch test, bool finished = false)
+        private static void Log(string prefix, Resource test, bool finished = false)
         {
-            var detail = finished ? test.ToStringForFinished() : test.ToString();
-            var line = $"{DateTimeOffset.Now} {prefix} {detail}";
-            System.IO.File.AppendAllText(@"c:\logs\AutomationSynchOngoing.txt", $"{line}{Environment.NewLine}");
-        }
-
-        /// <summary>
-        /// Internal Logic for Index of 
-        /// </summary>
-        private class Synch
-        {
-            public enum TestState { Waiting, Running }
-            public enum TestType { Sequential, Parallel }
-
-            // Instance
-            public string Id { get; private set; }
-            public TestType Type { get; private set; }
-            public TestState State { get; private set; }
-            private int Slot { get; set; }
-
-            // Index
-            private static List<Synch> _lockIndex = new List<Synch>();
-
-            // Index Public
-            public static Synch GetLock(string testName)
+            if(GlobalLog == null)
             {
-                return _lockIndex.SingleOrDefault(i => i.Id == testName);
-            }
-            public static int Count { get { return _lockIndex.Count; } }
-
-            public static bool Blocked(Synch test)
-            {
-                if (test.Type == TestType.Sequential)
-                {
-                    return ThereIsSomethingRunning(test);
-                }
-                return ThereAreSequentials(test);
-            }
-            public static void IHaveFinished(Synch test)
-            {
-                _lockIndex.Remove(test);
+                return;
             }
 
-            // Index Private
-            private static bool ThereIsSomethingRunning(Synch test)
-            {
-                if (_lockIndex.Any(i => i.Id != test.Id && i.State == TestState.Running))
-                {
-                    return true;
-                }
-                test.State = TestState.Running;
-                return false;
-            }
-            private static bool ThereAreSequentials(Synch test)
-            {
-                if (_lockIndex.Any(i => i.Id != test.Id && i.Type == TestType.Sequential))
-                {
-                    return true;
-                }
-                test.State = TestState.Running;
-                return false;
-            }
-            private static int NextFreeSlot()
-            {
-                var slot = 0;
-                for (slot = 0; true; slot++)
-                {
-                    if (_lockIndex.All(index => index.Slot != slot))
-                    {
-                        break;
-                    }
-                }
-                return slot;
-            }
-
-            // Constructor
-            public Synch(string id, bool runOnItsOwn)
-            {
-                // Instance
-                Id = id;
-                Type = runOnItsOwn ? TestType.Sequential : TestType.Parallel;
-
-                State = TestState.Waiting;
-                Slot = NextFreeSlot();
-
-                // Index
-                _lockIndex.Add(this);
-            }
-
-            public override string ToString()
-            {
-                return $"{ToStringForState()} {ToStringForSlot()}";
-            }
-            public string ToStringForFinished()
-            {
-                return $"{ToStringForStateBlank()} {ToStringForSlot()}";
-            }
-            private string ToStringForState()
-            {
-                return $"{State.ToString().Substring(0, 1)}";
-            }
-            private string ToStringForStateBlank()
-            {
-                return $" ";
-            }
-            private string ToStringForSlot()
-            {
-                var column = this.Slot * 8;
-                return $"{Type.ToString().Substring(0, 1)} {_lockIndex.Count()} -> {" ".PadLeft(column, ' ')}{Id}";
-            }
+            var line = $"{DateTimeOffset.Now} {test.ToString(prefix)}";
+            GlobalLog.Debug(line);
         }
     }
 }
