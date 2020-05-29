@@ -6,19 +6,25 @@
     <Company />
     <Product>Synchotron</Product>
     <Title>Specflow Serial Scenario Blocker</Title>
-    <Description>Within a parallel run, enable blocking behaviour so scenarios can be guaranteed to run individually, eg triggered by traits.  Prevents having to edit the assembly info and rebuild between sequential/parallel runs.</Description>
+    <Description>Synchronise Resources using Blocking behaviour.  (Assume that all resources can be run in parallel, apart from some that are flagged to only run with no other resources in action).  In the context of Specflow, scenarios can be flagged to run alone using traits.  Prevents test runners having to edit the assembly info and rebuild between sequential/parallel run contexts.  Hopefully at some point the Specflow bods autogenerate this sort of this, but not yet, so here we are.</Description>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/dneedy/Specflow-Synchotron.git</RepositoryUrl>
     <RepositoryType />
-    <PackageReleaseNotes>Alpha Working Version
-- Includes Readme</PackageReleaseNotes>
+    <PackageReleaseNotes>Has Testing, so could then be refactored to provide clearer separation between components, and with good READMEs</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>Dneedy.Specflow.Synchotron</PackageId>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <PackageTags>specflow nunit parallel sequential block dneedy</PackageTags>
     <Copyright>David Needham</Copyright>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Version>1.0.1</Version>
+    <Version>2.0.0</Version>
+    <PackageIconUrl>https://img.icons8.com/ultraviolet/2x/synchronize.png</PackageIconUrl>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\dave\source\repos\Specflow-Synchotron\Dneedy.Specflow\Dneedy.Specflow.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

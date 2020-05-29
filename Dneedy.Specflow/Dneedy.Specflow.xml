@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Dneedy.Specflow</name>
+    </assembly>
+    <members>
+        <member name="T:Dneedy.Specflow.Resource">
+            <summary>
+            Something that needs synchronising
+            </summary>
+        </member>
+        <member name="T:Dneedy.Specflow.Slots">
+            <summary>
+            Internal Logic for Index of 
+            </summary>
+        </member>
+        <member name="P:Dneedy.Specflow.Synchotron.Synchotron.GlobalLog">
+            <summary>
+            Optional Logging that can be set to track the synchronisation occurring
+            </summary>
+        </member>
+        <member name="M:Dneedy.Specflow.Synchotron.Synchotron.ResourceIsBlocked(System.String,System.Boolean)">
+            <summary>
+            Start tracking a resource
+            </summary>
+            <param name="resourceName"></param>
+            <param name="runOnItsOwn"></param>
+            <returns>If the resource is blocked</returns>
+        </member>
+        <member name="M:Dneedy.Specflow.Synchotron.Synchotron.ResourceIsBlocked(System.String)">
+            <summary>
+            Check if the resource is still blocked
+            </summary>
+            <param name="resourceName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Dneedy.Specflow.Synchotron.Synchotron.ResourceHasFinished(System.String)">
+            <summary>
+            Finish tracking a resource
+            </summary>
+            <param name="resourceName"></param>
+        </member>
+    </members>
+</doc>
